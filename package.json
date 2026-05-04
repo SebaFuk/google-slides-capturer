@@ -1,0 +1,16 @@
+{
+  "name": "google-slides-capturer-webzip",
+  "version": "1.0.0",
+  "description": "Versi\u00f3n web de Google Slides Capturer que genera PNG/PDF y descarga un ZIP.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "playwright": "^1.45.3",
+    "pdfkit": "^0.15.0",
+    "pngjs": "^7.0.0",
+    "archiver": "^7.0.1"
+  }
+}

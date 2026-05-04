@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Google Slides Capturer Web</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main class="app">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Versión web</p>
+        <h1>Google Slides → ZIP</h1>
+        <p class="subtitle">
+          Pegá un link publicado/embed de Google Slides, previsualizá la captura, generá PNG + PDF y descargá un ZIP con todo.
+        </p>
+      </div>
+    </section>
+
+    <section class="grid">
+      <form id="captureForm" class="panel">
+        <label>
+          Link de la presentación
+          <textarea id="url" rows="4" placeholder="https://docs.google.com/presentation/d/e/.../pubembed?slide=id.p57"></textarea>
+        </label>
+
+        <label>
+          Preset de resolución
+          <select id="preset">
+            <option value="custom">Personalizado</option>
+            <option value="1280x720">HD 1280x720</option>
+            <option value="1920x1080" selected>Full HD 1920x1080</option>
+            <option value="2560x1440">2K 2560x1440</option>
+            <option value="3840x2160">4K 3840x2160</option>
+          </select>
+        </label>
+
+        <div class="two">
+          <label>
+            Ancho
+            <input id="width" type="number" min="320" value="1920" />
+          </label>
+          <label>
+            Alto
+            <input id="height" type="number" min="240" value="1080" />
+          </label>
+        </div>
+
+        <div class="two">
+          <label>
+            Escala/calidad
+            <select id="scale">
+              <option value="1" selected>1x normal</option>
+              <option value="2">2x más nítido</option>
+              <option value="3">3x pesado</option>
+            </select>
+          </label>
+          <label>
+            Delay de carga
+            <input id="delayMs" type="number" min="0" step="1" value="1800" />
+          </label>
+        </div>
+
+        <div class="two">
+          <label>
+            Reintentos por slide
+            <input id="retries" type="number" min="0" max="10" value="2" />
+          </label>
+          <label>
+            Formato slide
+            <select id="aspectRatio">
+              <option value="16:9" selected>16:9</option>
+              <option value="4:3">4:3</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="check">
+          <input id="cleanCapture" type="checkbox" checked />
+          Captura limpia sin bordes/controles de Google Slides
+        </label>
+
+        <label class="check">
+          <input id="validateBlank" type="checkbox" checked />
+          Validar si la captura salió en blanco o mal cargada
+        </label>
+
+        <label class="check">
+          <input id="exportPdf" type="checkbox" checked />
+          Incluir también PDF dentro del ZIP
+        </label>
+
+        <label class="check">
+          <input id="fullPage" type="checkbox" />
+          Capturar página completa
+        </label>
+
+        <div class="rangeBox">
+          <label class="check">
+            <input id="rangeEnabled" type="checkbox" />
+            Activar modo rango: cambiar solo el número final de <code>slide</code>
+          </label>
+
+          <div class="three">
+            <label>
+              Desde
+              <input id="from" type="number" min="1" value="1" />
+            </label>
+            <label>
+              Hasta
+              <input id="to" type="number" min="1" value="60" />
+            </label>
+            <label>
+              Preview slide
+              <input id="previewSlide" type="number" min="1" value="1" />
+            </label>
+          </div>
+
+          <p class="warning">
+            Ejemplo: si el link termina en <code>slide=id.p57</code>, el rango genera <code>id.p1</code>, <code>id.p2</code>, <code>id.p3</code>...
+          </p>
+        </div>
+
+        <label>
+          Nombre base del archivo
+          <input id="prefix" value="slide" />
+        </label>
+
+        <div class="actions">
+          <button type="button" id="previewBtn">Generar preview</button>
+          <button type="submit" class="primary">Generar ZIP</button>
+        </div>
+
+        <button type="button" id="cancelBtn" class="danger" disabled>Cancelar proceso</button>
+
+        <div class="progressWrap">
+          <div class="progressTop">
+            <strong id="progressText">0%</strong>
+            <span id="progressDetail">Sin proceso activo</span>
+          </div>
+          <div class="progressBar">
+            <div id="progressFill"></div>
+          </div>
+        </div>
+
+        <pre id="status"></pre>
+      </form>
+
+      <section class="panel previewPanel">
+        <div class="previewHeader">
+          <h2>Previsualización</h2>
+          <a id="openPreview" target="_blank" rel="noreferrer">Abrir imagen</a>
+        </div>
+
+        <div class="imageStage">
+          <img id="previewImage" alt="La preview aparecerá acá" />
+          <span id="emptyState">Todavía no generaste preview.</span>
+        </div>
+
+        <div class="resultBox">
+          <div class="resultHeader">
+            <h3>Resultado</h3>
+            <a id="downloadZip" download>Descargar ZIP</a>
+          </div>
+          <div id="resultSummary" class="metaBox">Todavía no generaste ningún ZIP.</div>
+          <div id="results"></div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
